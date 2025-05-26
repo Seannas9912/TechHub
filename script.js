@@ -134,8 +134,66 @@ function setupFilters() {
     });
 }
 
+function updateCartCount() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (cartCountElement) {
+        cartCountElement.textContent = totalItems;
+    }
+    console.log('Cart now has', totalItems, 'items');
+}
+
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));   
+}
+
+function loadCart() {
+    const savedCart = localStorage.getItem('techVibe-cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartCount();
+        console.log('Loaded cart with', cart.length, 'items');
+    }
+}
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) {
+        console.error('Product not found:', productId);
+        return;
+    }
+    const existingItem = cart.find(item => item.id === productId);
+    if (existingItem) {
+        existingItem.quantity+= 1;
+        console.log(`Increased quantity of ${product.name} to ${existingItem.quantity}`);
+    } else {
+        cart.push({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            quantity: 1
+        });
+    }
+
+    updateCartCount();
+    saveCart();
+    showNotification(`Added ${product.name} to cart!`);
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+    
+
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Page loaded, displaying products...');
+    loadCart();
     displayProducts();
     setupFilters();
 });
