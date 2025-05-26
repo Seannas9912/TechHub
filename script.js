@@ -4,7 +4,7 @@ const products = [
         name: "iPhone 15 Pro",
         price: 999,
         category: "phones",
-        image: "https://via.placeholder.com/300x200/3b82f6/white?text=iPhone+15+Pro",
+        image: "https://www.firstshop.co.za/cdn/shop/files/mt223zm-a-bags-cases-and-sleeves-45740279890084.png?v=1722384459&width=480",
         description: "The latest iPhone with amazing camera and performance"
     },
     {
@@ -12,7 +12,7 @@ const products = [
         name: "MacBook Air",
         price: 1199,
         category: "laptops",
-        image: "https://via.placeholder.com/300x200/10b981/white?text=MacBook+Air",
+        image: "https://www.firstshop.co.za/cdn/shop/files/mc7x4ze-a-macbook-59463117832559.jpg?v=1732154689&width=675",
         description: "Lightweight laptop perfect for students and professionals"
     },
     {
@@ -20,7 +20,7 @@ const products = [
         name: "AirPods Pro",
         price: 249,
         category: "accessories",
-        image: "https://via.placeholder.com/300x200/f59e0b/white?text=AirPods+Pro",
+        image: "https://www.firstshop.co.za/cdn/shop/files/mtjv3ze-a-other-accessories-44519895531684.png?v=1712156324&width=480",
         description: "Wireless earbuds with active noise cancellation"
     },
     {
@@ -28,7 +28,7 @@ const products = [
         name: "Samsung Galaxy S24",
         price: 899,
         category: "phones",
-        image: "https://via.placeholder.com/300x200/8b5cf6/white?text=Samsung+Galaxy+S24",
+        image: "https://www.firstshop.co.za/cdn/shop/files/mf2844-smartphone-accessories-46130830704804.png?v=1726331321&width=675",
         description: "Android phone with stunning display and camera"
     },
     {
@@ -36,7 +36,7 @@ const products = [
         name: "Dell Laptop",
         price: 799,
         category: "laptops",
-        image: "https://via.placeholder.com/300x200/06b6d4/white?text=Dell+Laptop",
+        image: "https://www.firstshop.co.za/cdn/shop/files/warmlk2-n15rpl-2500-3407-pla-h-windows-laptops-1169573548.jpg?v=1748004671&width=675",
         description: "Reliable laptop for everyday use"
     },
     {
@@ -44,7 +44,7 @@ const products = [
         name: "Wireless Mouse",
         price: 49,
         category: "accessories",
-        image: "https://via.placeholder.com/300x200/ec4899/white?text=Wireless+Mouse",
+        image: "https://www.firstshop.co.za/cdn/shop/files/758a8aa-mice-44784485695652.jpg?v=1714117433&width=675",
         description: "Ergonomic wireless mouse for comfortable use"
     }
 ];
@@ -66,4 +66,51 @@ function formatPrice(price) {
 }
 
 console.log('JavaScript loaded successfully!');
-console.log('We have', products.lenght, 'products');
+console.log('We have', products.length, 'products');
+
+function createProductCard(product) {
+    return `
+        <div class="product-card">
+            <img src="${product.image}" alt="${product.name}" class="product-image">
+            <div class="product-info">
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
+                <div class="product-price">
+                    ${formatPrice(product.price)}
+                </div>
+                <div class="product-actions">
+                    <button class="btn btn-primary btn-small" onclick="addToCart(${product.id})">Add to Cart</button>
+                    <button class="btn btn-secondary btn-small" onclick="viewProduct(${product.id})">View Details</button>
+                </div>
+            </div
+        </div>
+    `;
+}
+
+function displayProducts(productsToShow = products) {
+    if (productsGrid) {
+        const productsHTML = productsToShow.map(createProductCard).join('');
+        productsGrid.innerHTML = productsHTML;
+    }
+
+    if (featuredProducts) {
+        const featuredHTML = productsToShow.slice(0, 3).map(createProductCard).join('');
+        featuredProducts.innerHTML = featuredHTML;
+    }
+}
+
+function addToCart(productId) {
+    alert(`Product ${productId} added to cart!`);
+}
+
+function viewProduct(productId) {
+    const product = products.find(p => p.id === productId);
+    alert('Product: ' + product.name + 
+        '\nPrice: ' + formatPrice(product.price) + 
+        '\nDescription: ' + product.description);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded, displaying products...');
+    displayProducts(products);
+});
